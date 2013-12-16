@@ -39,7 +39,7 @@ setup(name='trytond_nereid_demo_store',
     package_dir={'trytond.modules.nereid_demo_store': 'tryton_module'},
     packages=[
         'trytond.modules.nereid_demo_store',
-        'trytond.modules.nereid_demo_store.tests',
+#        'trytond.modules.nereid_demo_store.tests',
     ],
     package_data={
         'trytond.modules.nereid_demo_store': info.get('xml', []) \

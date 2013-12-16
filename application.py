@@ -10,7 +10,7 @@
 import os
 cwd = os.path.abspath(os.path.dirname(__file__))
 app_root_path = os.path.dirname(os.path.join(cwd, '../'))
-activate_this = '%s/bin/activate_this.py' % app_root_path
+activate_this = '%s/venv/bin/activate_this.py' % app_root_path
 execfile(activate_this, dict(__file__=activate_this))
 
 
@@ -22,7 +22,7 @@ from werkzeug.contrib.sessions import FilesystemSessionStore
 
 os.environ['PYTHON_EGG_CACHE'] = '%s/.egg_cache' % app_root_path
 
-SITE = 'glorifiedcalculators.com'
+SITE = 'nereid-demo.openlabs.co.in'
 
 CONFIG = dict(
 
@@ -94,7 +94,7 @@ class NereidHostChangeMiddleware(object):
 if __name__ == '__main__':
     # If the file is launched from the CLI then launch the app using the debug
     # web server built into werkzeug
-    #app.wsgi_app = NereidHostChangeMiddleware(app.wsgi_app, SITE)
+    app.wsgi_app = NereidHostChangeMiddleware(app.wsgi_app, SITE)
     app.debug = True
     app.static_folder = '%s/templates/%s/static' % (cwd, SITE)
     app.run('0.0.0.0')
