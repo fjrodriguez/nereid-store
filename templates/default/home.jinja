@@ -1,64 +1,82 @@
-{% extends 'default/base.jinja' %}
+<!DOCTYPE html>
+<html lang="{{ request.nereid_language.code }}">
+{% set STATIC = url_for('static', filename='').split('?')[0] %}
+<head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
 
-{% set title = "Home" %}
+    <link rel="shortcut icon type=image/x-icon" href="{{ STATIC }}img/system/favicon.ico">
 
+    <!-- CSS -->
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{{ STATIC }}css/reset.css" />
+  <link rel="stylesheet" href="{{ STATIC }}css/text.css" />
+  <link rel="stylesheet" href="{{ STATIC }}css/960.css" />
+  <link rel="stylesheet" href="{{ STATIC }}style.css" />
 
-{% block main %}
-<script>
-  $(document).ready(function() {
-    $('a.padd').click(function() {
-      $.post(
-        '{{ url_for('nereid.cart.add_to_cart') }}',
-        {
-          product: $(this).attr('data-product'),
-          quantity: 1
-        },
-        function() {
-          window.location = '{{ url_for('nereid.cart.view_cart') }}';
-        }
-      );
+  <!-- To be made locallinks from hot links -->
+  <link rel="stylesheet" href="http://zacstewart.github.com/Meow/jquery.meow.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  <!-- END CSS -->
+
+  <!-- Javascript -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ STATIC }}js/jquery.carousel.js" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ STATIC }}js/jquery.gmap-1.1.0-min.js" type="text/javascript"></script>
+  <script src="{{ STATIC }}js/jquery.rating.js" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ STATIC }}js/jquery.anythingslider.js" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ STATIC }}js/custom.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- To be made locallinks from hot links -->
+  <script src="http://zacstewart.github.com/Meow/jquery.meow.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+  <!-- END Javascript -->
+
+  <!-- Message Flashing -->
+  <script>
+    $(document).ready(function() {
+      {% for category, message in get_flashed_messages(with_categories=True) %}
+      $.meow({
+        message: '{{ message }}',
+      });
+      {% endfor %}
     });
-  });
-</script>
-<div class="container_16">
-  <div class="grid_16">
-    {% if request.nereid_website.latest_products_node %}
-    <div class="sliderinner"> <a href="javascript:;" class="slideprev">Previous</a> <a href="javascript:;" class="slidenext">Next</a>
-      <ul>
-        {% for product in request.nereid_website.latest_products_node.products[:5] %}
+  </script>
+  <!-- END message Flashing -->
+
+  <!-- Submodules -->
+  {% block extra_head %}
+  {% endblock %}
+  <!-- END Submodules -->
+
+</head>
+<body>
+<div id="meows"/>
+
+<div class="header">
+  <div class="contaider_16">
+    <div class="grid_5 logo">
+    <a href="{{ url_for('nereid.website.home') }}">
+      <img src="{{ STATIC }}images/logo.png" alt="logo" />
+    </a>
+    </div>
+    <div class="grid_6">
+    <div class="deliver-margin"><img src="{{ STATIC }}images/icons/go.png"><span><a href="#" class="delivery">{% trans %}Free 2-Days Delivery or faster<br>
+      ON FIRST ORDER $25+{% endtrans %}</a></span></div>
+    </div>
+    <div class="grid_5"><a href="#" class="search">&nbsp;</a>
+      <div class="searchtoggle">
+        <form>
+          <input type="text" id="s" onBLur="if(this.value=='')this.value='Type keyword and hit enter';" onFocus="if(this.value='Type keyword and hit enter')this.value='';" value="Type keyword and hit enter" />
+        </form>
+    </div>
+    <div class="grid_16 menu">
+      <ul class="menu1">
         <li>
-          <div class="leftpart">
-            <a href="{{ url_for('product.product.render', uri=product.uri) }}">
-              <img src="{{ product.image_sets[0].large_image.url }}" alt="{{ product.name }}" /> 
-            </a>
-          </div>
-          <div class="rightpart">
-            <div class="discount">
-              {% set sale_price = product.sale_price(product.id, 1) %}
-              {% if sale_price < product.list_price %}
-              <span class="old">{{ product.list_price|currencyformat(request.nereid_currency.code) }}</span> 
-              {% endif %}
-              <span class="new">{{ sale_price|currencyformat(request.nereid_currency.code) }}</span> 
-            </div>
-            <h1>{{ product.name }}</h1>
-            <div class="pdesc">{{ product.description|truncate(250) }}</div>
-            <a class="padd" data-product="{{ product.id }}" href="#">Add to cart</a> </div>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="sliderout">
-      <ul class="ftrd">
-        <div class="thingy"> <img src="{{ STATIC }}images/slidething.png" class="handle" alt="" /> </div>
-        {% for product in request.nereid_website.latest_products_node.products[:5] %}
-        <li class="ftrd-lbl{{ loop.index }}">
-          <h2>{{ product.name|truncate(50) }}</h2>
-          <span>{{ product.code }}</span>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
+          <a href="{{ url_for('nereid.website.home') }}" class="active">
+            {% trans %}Home{% endtrans %}<span>&nbsp;</span>
+          </a>
   </div>
 </div>
-{% endblock %}
+</body>
+</html>
+
