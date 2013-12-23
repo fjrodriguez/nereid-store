@@ -49,11 +49,13 @@ CONFIG = dict(
     #CACHE_MEMCACHED_SERVERS = ['localhost:11211'],
 
     # If the application is to be configured in the debug mode
-    DEBUG = False,
+    DEBUG = True,
 
     TEMPLATE_LOADER_CLASS = 'nereid.templating.FileSystemLoader',
     TEMPLATE_SEARCH_PATH = '%s/templates/' % cwd,
     TRANSLATIONS_PATH = '%s/i18n/' % cwd,
+
+    BABEL_DEFAULT_LOCALE = 'en',
 )
 
 # Create a new application
@@ -94,7 +96,8 @@ class NereidHostChangeMiddleware(object):
 if __name__ == '__main__':
     # If the file is launched from the CLI then launch the app using the debug
     # web server built into werkzeug
-    app.wsgi_app = NereidHostChangeMiddleware(app.wsgi_app, SITE)
+    app.wsgi_app = NereidHostChangeMiddleware(application, SITE)
     app.debug = True
     app.static_folder = '%s/templates/%s/static' % (cwd, SITE)
     app.run('0.0.0.0')
+
